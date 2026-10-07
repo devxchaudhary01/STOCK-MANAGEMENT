@@ -47,5 +47,5 @@ authRouter.put('/users/:id', authRequired, requireRole('ADMIN'), asyncH(async (r
   if (req.params.id === req.user!.id && (b.active === false || b.role === 'SALES')) throw new HttpError(400, 'You cannot block or demote yourself');
   if (b.username && await User.exists({ username: b.username.toLowerCase(), _id: { $ne: req.params.id } })) throw new HttpError(409, 'Username already exists');
   const set: any = { ...b }; delete set.password; if (b.username) set.username = b.username.toLowerCase(); if (b.password) set.passwordHash = await bcrypt.hash(b.password, 12);
-  await User.updateOne({ _id: req.params.id }, { $set: set }); invalidateUser(req.params.id); res.json({ ok: true });
+  await User.updateOne({ _id: req.params.id }, { $set: set }); invalidateUser(String(req.params.id)); res.json({ ok: true });
 }));

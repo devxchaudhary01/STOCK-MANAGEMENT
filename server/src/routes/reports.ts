@@ -81,9 +81,9 @@ async function sendXlsx(res: Response, name: string, r: Report, q: any) {
   res.setHeader('Content-Disposition', `attachment; filename="${name}-${new Date().toISOString().slice(0, 10)}.xlsx"`); res.send(buf);
 }
 reportsRouter.get('/:name', asyncH(async (req, res) => {
-  const r = REPORTS[req.params.name]; if (!r) throw new HttpError(404, 'Unknown report');
-  if (req.user!.role !== 'ADMIN') { if (!['sales', 'availability'].includes(req.params.name)) throw new HttpError(403, 'Not allowed for your panel'); (req.query as any).userId = req.user!.id; }   // sales team: only their own sales + availability
-  if (req.query.format === 'xlsx') return void (await sendXlsx(res, req.params.name, r, req.query));
+  const r = REPORTS[String(req.params.name)]; if (!r) throw new HttpError(404, 'Unknown report');
+  if (req.user!.role !== 'ADMIN') { if (!['sales', 'availability'].includes(String(req.params.name))) throw new HttpError(403, 'Not allowed for your panel'); (req.query as any).userId = req.user!.id; }   // sales team: only their own sales + availability
+  if (req.query.format === 'xlsx') return void (await sendXlsx(res, String(req.params.name), r, req.query));
   const { limit, page, skip } = paging(req.query, 500); const out = await r.run(req.query, { skip, limit });
   res.json({ title: r.title, columns: r.columns, ...out, page, pages: Math.ceil(out.total / limit) });
 }));

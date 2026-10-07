@@ -36,7 +36,7 @@ suppliersRouter.put('/:id', requireRole('ADMIN'), asyncH(async (req, res) => {
 }));
 /** Supplier history: totals + items purchased + recent purchases (simple, no analytics). */
 suppliersRouter.get('/:id', asyncH(async (req, res) => {
-  if (!Types.ObjectId.isValid(req.params.id)) throw new HttpError(400, 'Invalid id');
+  if (!Types.ObjectId.isValid(String(req.params.id))) throw new HttpError(400, 'Invalid id');
   const s = await Supplier.findById(req.params.id).lean(); if (!s) throw new HttpError(404, 'Supplier not found'); const sid = s._id;
   const [perItem, recent, lastP] = await Promise.all([
     Purchase.aggregate([{ $match: { supplierId: sid, status: 'ACTIVE' } }, { $group: { _id: '$itemId', qty: { $sum: '$quantity' } } }]),   // one row per distinct item

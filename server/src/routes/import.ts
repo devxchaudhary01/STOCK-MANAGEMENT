@@ -80,7 +80,7 @@ importRouter.get('/logs', requireRole('ADMIN'), asyncH(async (req, res) => {
   const { limit, page, skip } = paging(req.query, 100); const f = { status: { $ne: 'UPLOADED' } };
   const [rows, total] = await Promise.all([ImportLog.find(f, '-changes -options -mapping').sort({ createdAt: -1 }).skip(skip).limit(limit).lean(), ImportLog.countDocuments(f)]); res.json({ rows, total, page, pages: Math.ceil(total / limit) });
 }));
-importRouter.post('/logs/:id/rollback', requireRole('ADMIN'), asyncH(async (req, res) => res.json(await rollbackImport(req.params.id, actor(req)))));
+importRouter.post('/logs/:id/rollback', requireRole('ADMIN'), asyncH(async (req, res) => res.json(await rollbackImport(String(req.params.id), actor(req)))));
 
 // ---------------- Invoice photo / PDF -> OCR -> review (NEVER changes stock) ----------------
 importRouter.post('/invoice', upload.single('file'), asyncH(async (req, res) => {
