@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@theme {
+  --font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --color-ink: #16243a; --color-brand: #1f3a5f; --color-brand-soft: #e8eef6;
+  --color-ok: #1f8a4c; --color-warn: #d9a400; --color-bad: #c62828; --color-dead: #4a0d0d; --color-unset: #e67700;
+}
+body { @apply bg-slate-50 text-ink antialiased; }
+:focus-visible { outline: 2px solid #1f3a5f; outline-offset: 2px; }
+.tbl { @apply w-full text-sm; }
+.tbl th { @apply bg-slate-100 text-left font-semibold text-slate-600 px-3 py-2 whitespace-nowrap sticky top-0; }
+.tbl td { @apply px-3 py-2 border-t border-slate-100; }
+.tbl tbody tr:hover { @apply bg-brand-soft/50; }
+.inp { @apply border border-slate-300 rounded-md px-2.5 py-1.5 text-sm bg-white w-full focus:border-brand; }
+.btn { @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-sm font-medium border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed; }
+.btn-primary { @apply bg-brand text-white border-brand hover:bg-[#17304f]; }
+.btn-danger { @apply bg-bad text-white border-bad hover:bg-red-800; }
+.card { @apply bg-white border border-slate-200 rounded-lg; }
+
+/* Blinking lights: ambulance-style red/blue for OUT OF STOCK, blinking red for ORDER REQUIRED */
+@keyframes siren { 0%, 49% { background: #e11d1d; box-shadow: 0 0 10px 3px rgba(225,29,29,.85); } 50%, 100% { background: #1d4ed8; box-shadow: 0 0 10px 3px rgba(29,78,216,.85); } }
+@keyframes blinkred { 0%, 49% { opacity: 1; box-shadow: 0 0 10px 3px rgba(225,29,29,.85); } 50%, 100% { opacity: .2; box-shadow: none; } }
+.beacon { display: inline-block; width: .85rem; height: .85rem; border-radius: 9999px; flex: none; }
+.beacon-out { background: #e11d1d; animation: siren .55s steps(1) infinite; }
+.beacon-order { background: #e11d1d; animation: blinkred .9s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .beacon-out, .beacon-order { animation: none; } }
+@keyframes pulse-mic { 0%,100% { box-shadow: 0 0 0 0 rgba(198,40,40,.6); } 50% { box-shadow: 0 0 0 10px rgba(198,40,40,0); } }
+.mic-live { animation: pulse-mic 1.2s infinite; background: #c62828 !important; color: #fff !important; border-color: #c62828 !important; }

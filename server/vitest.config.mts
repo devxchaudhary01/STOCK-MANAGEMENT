@@ -1,0 +1,2 @@
+import { defineConfig } from 'vitest/config';
+export default defineConfig({ test: { include: ['tests/**/*.test.ts'], testTimeout: 60000, hookTimeout: 60000, fileParallelism: false, env: { NODE_ENV: 'test', AUTH_REQUIRED: 'true', JWT_SECRET: 'test-secret-test-secret-test-secret-1234', ADMIN_PASSWORD: 'TestAdmin123!', STORAGE_DIR: './storage-test', MONGODB_URI: process.env.TEST_MONGODB_URI || 'mongodb://127.0.0.1:27017/ssct_stock_test' } } });
